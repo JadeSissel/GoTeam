@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                     String email = _txtEmail.getText().toString();
                     String pass = _txtPass.getText().toString();
-                //db.execSQL("CREATE TABLE if not exists person (ID INTEGER PRIMARY KEY AUTOINCREMENT , FirstName TEXT , LastName TEXT, Password TEXT , Email TEXT , Phone TEXT ) ");
+                db.execSQL("CREATE TABLE if not exists person (ID INTEGER PRIMARY KEY AUTOINCREMENT , FirstName TEXT , LastName TEXT, Password TEXT , Email TEXT , Phone TEXT ) ");
 
                 cursor = db.rawQuery("SELECT * FROM " + DBHandler.TABLE_NAME + " WHERE " + DBHandler.COL_5 + " =? AND " + DBHandler.COL_4 + " =? ", new String[]{email, pass});
                     if (cursor != null) {
