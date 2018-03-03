@@ -19,7 +19,11 @@
         </activity>
         <activity android:name=".SecondActivity" />
         <activity android:name=".UserReg" />
-        <activity android:name=".TeamReg"></activity>
+        <activity android:name=".TeamReg" />
+        <activity android:name=".MyBio" />
+        <activity android:name=".SubmitKudo" />
+        <activity android:name=".GoTeamStats" />
+        <activity android:name=".MyTeam"></activity>
     </application>
 
 </manifest>
