@@ -23,7 +23,8 @@
         <activity android:name=".MyBio" />
         <activity android:name=".SubmitKudo" />
         <activity android:name=".GoTeamStats" />
-        <activity android:name=".MyTeam"></activity>
+        <activity android:name=".MyTeam" />
+        <activity android:name=".NewSkill" />
     </application>
 
 </manifest>

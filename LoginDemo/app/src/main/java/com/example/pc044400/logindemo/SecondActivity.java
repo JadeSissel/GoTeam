@@ -41,6 +41,9 @@ public class SecondActivity extends AppCompatActivity {
         TextView nameView = (TextView) findViewById(R.id.tvWelcome);
 
         final String UserName = getIntent().getExtras().getString("userName");
+        DBHandler dab = new DBHandler(getApplicationContext());
+
+        dab.setCurUserName(UserName);
         nameView.setText(UserName + "'s Profile Page " );
 
 
