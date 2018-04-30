@@ -106,7 +106,9 @@ public class UserReg extends AppCompatActivity {
 
     public void insertdata(String fname, String lname, String pass, String email, String phone, String team){
 
+        //subroutine handles inserting a new person
         ContentValues contentValues = new ContentValues();
+        String search = fname+" "+lname;
         contentValues.put(DBHandler.COL_2, fname);
         contentValues.put(DBHandler.COL_3, lname);
         contentValues.put(DBHandler.COL_4, pass);
@@ -114,6 +116,7 @@ public class UserReg extends AppCompatActivity {
         contentValues.put(DBHandler.COL_6, phone);
         contentValues.put(DBHandler.COL_7, team);
         contentValues.put(DBHandler.COL_8, " Enter your Bio!");
+        contentValues.put(DBHandler.COL_15, search);
         long id = db.insert(DBHandler.TABLE_NAME, null, contentValues);
 
     }

@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tonikamitv.loginregister">
-
-    <uses-permission android:name="android.permission.INTERNET" />
+    package="com.example.pc044400.logindemo">
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Go Team!"
+        android:minSdkVersion="10"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".UserAreaActivity"></activity>
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".UserReg" />
+        <activity android:name=".TeamReg" />
+        <activity android:name=".MyBio" />
+        <activity android:name=".SubmitKudo" />
+        <activity android:name=".GoTeamStats" />
+        <activity android:name=".MyTeam" />
+        <activity android:name=".NewSkill" />
+        <activity android:name=".UserBio" />
+        <activity android:name=".profiletemplate"></activity>
     </application>
 
 </manifest>

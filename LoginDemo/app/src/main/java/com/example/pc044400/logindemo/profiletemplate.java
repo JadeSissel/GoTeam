@@ -1,6 +1,5 @@
 package com.example.pc044400.logindemo;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -19,12 +18,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
-import java.util.jar.Attributes;
 
-public class MyBio extends AppCompatActivity {
+public class profiletemplate extends AppCompatActivity {
     SQLiteOpenHelper openHelper;
     SQLiteDatabase db;
 
@@ -34,30 +30,33 @@ public class MyBio extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_bio);
-        final String UserName = getIntent().getExtras().getString("userName");
+        setContentView(R.layout.activity_profiletemplate);
+        final String UserName = getIntent().getExtras().getString("UserName");
+        final String UserFoundName = getIntent().getExtras().getString("UserFoundName");
         final Button _btnreg = (Button)findViewById(R.id.btnUpdate);
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
         final EditText _txtBio = (EditText) findViewById(R.id.etBio);
+        //final EditText _txtSkill = (EditText) findViewById(R.id.etSkill);
         Spinner s = (Spinner) findViewById(R.id.spinnerSkills);
 
         TextView bioView = (TextView) findViewById(R.id.etBio);
         TextView NameView = (TextView) findViewById(R.id.tvName2);
+        //TextView Phone = (TextView) findViewById(R.id.)
 
         openHelper = new DBHandler(this);
         DBHandler dab = new DBHandler(getApplicationContext());
-        String Fname = dab.getUDataFname(UserName);
-        String Lname = dab.getUDataLname(UserName);
+        String Fname = dab.getUDataFname(UserFoundName);
+        String Lname = dab.getUDataLname(UserFoundName);
 
         final String Name = "Name: "+ Fname + " " + Lname;
-        final String bio = dab.getBioData(UserName);
+        final String bio = dab.getBioFoundData(UserFoundName);
 
         bioView.setText(bio);
         NameView.setText(Name);
 
-        final List<String> skills = dab.getAllSkills(UserName);
+        final List<String> skills = dab.getAllSkills(UserFoundName);
 
 
         _spinner = (Spinner)findViewById(R.id.spinnerSkills);
@@ -68,45 +67,39 @@ public class MyBio extends AppCompatActivity {
         s.setAdapter(adapter);
 
         _spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                               @Override
-                                               public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                                                   // your code here
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
 
-                                                   if (position == (skills.size() - 1)) {
-                                                       if(skills.size() == 1) {
-                                                           Toast.makeText(getApplicationContext(), "please enter a skill", Toast.LENGTH_LONG).show();
-                                                       }
-                                                       else {
-                                                           Toast.makeText(getApplicationContext(), "Re-directing to skill creation page", Toast.LENGTH_LONG).show();
-                                                       }
-                                                       Intent intent = new Intent(MyBio.this, NewSkill.class);
-                                                       intent.putExtra("userName", UserName);
-                                                       startActivity(intent);
+                if (position == skills.size() - 1) {
+                    Toast.makeText(getApplicationContext(), "Re-directing to skill creation page", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(profiletemplate.this, NewSkill.class);
+                    intent.putExtra("userName", UserName);
+                   // startActivity(intent);
 
-                                                   }
-                                                   ;
-                                               }
+                }
+                ;
+            }
 
-                                               @Override
-                                               public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                                               }
-                                           });
+            }
+        });
         _btnreg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db = openHelper.getWritableDatabase();
                 DBHandler dab = new DBHandler(getApplicationContext());
 
-                String bio = _txtBio.getText().toString();
+                String bio= _txtBio.getText().toString();
 
-
-               dab.updateBio(UserName,bio);
+                dab.updateBio(UserName,bio);
 
 
                 Toast.makeText(getApplicationContext(), "updated successfully", Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(MyBio.this, MyBio.class);
+                Intent intent = new Intent(profiletemplate.this, MyBio.class);
                 intent.putExtra("userName", UserName);
                 startActivity(intent);
 
@@ -124,13 +117,12 @@ public class MyBio extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //menu bar logic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId())
         {
             case R.id.action_home:
-                Intent intent = new Intent(MyBio.this, SecondActivity.class);
+                Intent intent = new Intent(profiletemplate.this, SecondActivity.class);
                 final String UserName = getIntent().getExtras().getString("userName");
                 intent.putExtra("userName", UserName);
                 startActivity(intent);
@@ -139,7 +131,7 @@ public class MyBio extends AppCompatActivity {
             case R.id.action_logout:
                 final String UserNameZ = getIntent().getExtras().getString("userName");
                 Toast.makeText(getApplicationContext(), "Logout", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MyBio.this, MainActivity.class);
+                intent = new Intent(profiletemplate.this, MainActivity.class);
                 intent.putExtra("userName", UserNameZ);
 
                 startActivity(intent);

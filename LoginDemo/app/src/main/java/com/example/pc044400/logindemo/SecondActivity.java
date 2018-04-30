@@ -44,13 +44,13 @@ public class SecondActivity extends AppCompatActivity {
         DBHandler dab = new DBHandler(getApplicationContext());
 
         dab.setCurUserName(UserName);
-        nameView.setText(UserName + "'s Profile Page " );
+        nameView.setText(UserName);
 
 
         _btnMyBio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SecondActivity.this, MyBio.class);//Intend to go to a new registration activity
+                Intent intent = new Intent(SecondActivity.this, MyBio.class);//Intend to go to my bio activity
                 intent.putExtra("userName", UserName);
                 startActivity(intent);
 
@@ -60,9 +60,9 @@ public class SecondActivity extends AppCompatActivity {
         _btnGoTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SecondActivity.this, GoTeamStats.class);//Intend to go to a new registration activity
-
-                startActivity(intent);
+                Intent intent = new Intent(SecondActivity.this, GoTeamStats.class);//Intend to go to the activity with the kudos
+                intent.putExtra("userName", UserName);
+                startActivity (intent);
 
             }
         });
@@ -71,8 +71,8 @@ public class SecondActivity extends AppCompatActivity {
         _btnSubmitKudo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SecondActivity.this, SubmitKudo.class);//Intend to go to a new registration activity
-
+                Intent intent = new Intent(SecondActivity.this, SubmitKudo.class);//Intend to go to a new kudo activity
+                intent.putExtra("userName", UserName);
                 startActivity(intent);
 
             }
@@ -81,8 +81,8 @@ public class SecondActivity extends AppCompatActivity {
         _btnMyTeam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SecondActivity.this, MyTeam.class);//Intend to go to a new registration activity
-
+                Intent intent = new Intent(SecondActivity.this, MyTeam.class);//Intend to go to activity showing all of the team
+                intent.putExtra("userName", UserName);
                 startActivity(intent);
 
             }

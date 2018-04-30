@@ -20,12 +20,12 @@ import java.util.List;
 
 
 public class DBHandler extends SQLiteOpenHelper {
-
+    public static String FoundUserName = " ";
     public static String CurUserName = " ";
     public static String CurTeam = " ";
     public static final String DATABASE_NAME="GoTeam.db";
     public static final String TABLE_NAME="person";
-    public static final String COL_1="ID";
+    public static final String COL_1="PERSON_ID";
     public static final String COL_2="FirstName";
     public static final String COL_3="LastName";
     public static final String COL_4="Password";
@@ -33,8 +33,20 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COL_6="Phone";
     public static final String COL_7="Team";
     public static final String COL_8="BIO";
+    public static final String COL_9="skill_description";
+    public static final String COL_10="username";
+
+    public static final String COL_11="kudo_description";
+    public static final String COL_12="Fusername";
+    public static final String COL_13="Tusername";
+    public static final String COL_14="Submit_DT";
+    public static final String COL_15="SearchString";
+    public static final String COL_16="likecnt";
 
     public static final String TEAM_TABLE_NAME = "team";
+    public static final String SKILLS_TABLE_NAME = "skills_person_reltn";
+    public static final String KUDOS_TABLE_NAME = "kudos";
+
     public static final String TEAM_COL_1 = "TeamName";
     public static final String TEAM_COL_2 = "ManagerName";
 
@@ -46,10 +58,13 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); //Drop older table if exists
+        db.execSQL("CREATE TABLE person (PERSON_ID INTEGER PRIMARY KEY AUTOINCREMENT , FirstName TEXT , LastName TEXT, Password TEXT , Email TEXT , Phone TEXT , TEAM TEXT , BIO TEXT NOT NULL , SearchString TEXT ) ");
 
-        db.execSQL("CREATE TABLE person (ID INTEGER PRIMARY KEY AUTOINCREMENT , FirstName TEXT , LastName TEXT, Password TEXT , Email TEXT , Phone TEXT , Team TEXT , BIO TEXT NOT NULL, Skills TEXT ) ");
+        db.execSQL("CREATE TABLE team (TEAM_ID INTEGER PRIMARY KEY AUTOINCREMENT , TeamName TEXT , ManagerName TEXT ) ");
 
-        db.execSQL("CREATE TABLE team (ID INTEGER PRIMARY KEY AUTOINCREMENT , TeamName TEXT , ManagerName TEXT ) " );
+        db.execSQL("CREATE TABLE skills_person_reltn (reltn_id INTEGER PRIMARY KEY AUTOINCREMENT , skill_description TEXT , username TEXT ) ") ;
+
+        db.execSQL("CREATE TABLE kudos (kudo_id INTEGER PRIMARY KEY AUTOINCREMENT , kudo_description TEXT , Fusername TEXT , Tusername TEXT , Submit_DT TEXT , SearchString TEXT , likecnt INTEGER  ) ") ;
 
 
     }
@@ -58,6 +73,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); //Drop older table if exists
         db.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME); //Drop older table if exists
+
         onCreate(db);
     }
 
@@ -90,7 +106,33 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
+    public String getBioFoundData(String p) {
+        String bio = new String();
 
+        // Select All Query
+
+      //  *REDO THIS WHOLE SECTION*
+        String selectQuery = "SELECT BIO FROM " + TABLE_NAME + " WHERE SearchString = '" + p +"' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+        cursor.moveToFirst();
+        if(!cursor.isNull(0)){
+            bio = cursor.getString(cursor.getColumnIndex("BIO"));
+            cursor.close();
+        }else
+        {
+            bio = "n/a";
+        }
+        // looping through all rows and adding to list
+
+
+        // closing connection
+        db.close();
+
+        // returning lables
+        return bio;
+    }
        public String getBioData(String p) {
         String bio = new String();
 
@@ -221,11 +263,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return Team;
     }
 
-    public void updateBio(String p, String bio, String skill) {
+    public void updateBio(String p, String bio ) {
 
         // Select All Query
-        String updateQuery = "UPDATE PERSON SET BIO = '" + bio
-                + "' , Skills = " + "'" + skill + "'"
+        String updateQuery = "UPDATE PERSON "
+                + "SET BIO = '" + bio  + "'"
 
                 + " WHERE Email = '" + p +"'  ";
 
@@ -265,18 +307,18 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public String getCurTeam(String p) {
+    public String getCurTeam(String p){
 
         String team = new String();
 
         // Select All Query
-        String selectQuery = "SELECT Team FROM " + TABLE_NAME + " WHERE Email = '" + p +"' ";
+        String selectQuery = "SELECT TEAM FROM " + TABLE_NAME + " WHERE Email = '" + p +"' ";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
         cursor.moveToFirst();
         if(!cursor.isNull(0)){
-            team = cursor.getString(cursor.getColumnIndex("Team"));
+            team = cursor.getString(cursor.getColumnIndex("TEAM"));
             cursor.close();
         }else
         {
@@ -291,33 +333,79 @@ public class DBHandler extends SQLiteOpenHelper {
         // returning lables
         return team;
     }
-    public List<String>  getAllSkills(){
+    public List<String>  getAllSkills(String Uname){
 
 
-        List<String> list = new ArrayList<String>();
+        List<String> slist = new ArrayList<String>();
 
         // Select All Query
-        String selectQuery = "SELECT Skills FROM " + TEAM_TABLE_NAME + " group by skills";
+        String selectQuery = "SELECT skill_description FROM skills_person_reltn where username = " + "'" + Uname + "'" + " group by skill_description";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
-        list.add("Select a skill from below: ");
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                list.add(cursor.getString(1));//adding 2nd column data
-            } while (cursor.moveToNext());
+                slist.add(cursor.getString(0));//adding 2nd column data
+               } while (cursor.moveToNext());
         }
-        list.add("Create a new skill!");
+
+        slist.add("Create a new skill!");
         // closing connection
         cursor.close();
         db.close();
 
         // returning lables
-        return list;
+        return slist;
+    }
+    public List<String> getTopLikes() {
+        List<String> slist = new ArrayList<String>();
 
+        // Select All Query
+        String selectQuery = " SELECT (kudo_description||' from '||Fusername||' to '||Tusername||' on '||submit_dt||' like count: '|| likecnt ) as RESULT FROM kudos order by likecnt desc limit 3 ";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                slist.add(cursor.getString(0));//adding 2nd column data
+            } while (cursor.moveToNext());
+        }
+
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return slist;
     }
 
+    public List<String>  getAllKudos(String p){
+
+
+        List<String> slist = new ArrayList<String>();
+
+        // Select All Query
+        String selectQuery = " SELECT (kudo_description||' from '||Fusername||' to '||Tusername||' on '||submit_dt ) as RESULT FROM kudos order by submit_dt";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                slist.add(cursor.getString(0));//adding 2nd column data
+            } while (cursor.moveToNext());
+        }
+
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return slist;
+    }
     public void setCurUserName(String s)
     {
         CurUserName = s;
@@ -327,6 +415,17 @@ public class DBHandler extends SQLiteOpenHelper {
     public String getCurUserName()
     {
         return CurUserName;
+    }
+
+    public void setFoundUserName(String s)
+    {
+        FoundUserName = s;
+    }
+
+
+    public String getFoundUserName()
+    {
+        return FoundUserName;
     }
 
 

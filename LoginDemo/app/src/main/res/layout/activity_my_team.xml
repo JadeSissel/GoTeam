@@ -13,17 +13,18 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="11dp"
+            android:hint="Search" />
 
 
         <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="365dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/searchFilter"
-            android:layout_marginTop="22dp" >
-        </ListView>
+            android:layout_marginTop="22dp"></ListView>
 
         <Button
             android:id="@+id/button7"
@@ -32,7 +33,24 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="112dp"
-            android:text="Button" />
+            android:text="Home Button" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/radioButton"
+            android:layout_centerHorizontal="true"
+            android:text="My Team!" />
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/searchFilter"
+            android:layout_alignParentTop="true"
+            android:text="Search By Skills"
+            android:visibility="visible" />
 
 
 </RelativeLayout>
